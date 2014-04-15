@@ -237,9 +237,9 @@ clean:
 distclean: clean
 	rm -f config.mak x264_config.h config.h config.log x264.pc x264.def
 
-install-cli: cli
+install-cli: x264$(EXE)
 	$(INSTALL) -d $(DESTDIR)$(bindir)
-	$(INSTALL) x264$(EXE) $(DESTDIR)$(bindir)
+	$(INSTALL) $< $(DESTDIR)$(bindir)
 
 install-lib-dev:
 	$(INSTALL) -d $(DESTDIR)$(includedir)

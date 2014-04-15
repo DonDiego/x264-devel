@@ -149,7 +149,7 @@ OBJS   += $(SRCS:%.c=%.o)
 OBJCLI += $(SRCCLI:%.c=%.o)
 OBJSO  += $(SRCSO:%.c=%.o)
 
-.PHONY: all default fprofiled clean distclean install uninstall lib-static lib-shared cli install-lib-dev install-lib-static install-lib-shared install-cli
+.PHONY: all default fprofiled *clean install uninstall lib-s* cli install-*
 
 cli: x264$(EXE)
 lib-static: $(LIBX264)

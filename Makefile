@@ -8,8 +8,6 @@ vpath %.S $(SRCPATH)
 vpath %.asm $(SRCPATH)
 vpath %.rc $(SRCPATH)
 
-GENERATED =
-
 all: default
 default:
 
@@ -29,19 +27,9 @@ SRCCLI = x264.c input/input.c input/timecode.c input/raw.c input/y4m.c \
          filters/video/resize.c filters/video/cache.c filters/video/fix_vfr_pts.c \
          filters/video/select_every.c filters/video/crop.c filters/video/depth.c
 
-SRCSO =
-OBJS =
-OBJSO =
-OBJCLI =
-
 OBJCHK = tools/checkasm.o
 
 CONFIG := $(shell cat config.h)
-
-# GPL-only files
-ifneq ($(findstring HAVE_GPL 1, $(CONFIG)),)
-SRCCLI +=
-endif
 
 # Optional module sources
 ifneq ($(findstring HAVE_AVS 1, $(CONFIG)),)

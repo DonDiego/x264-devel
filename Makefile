@@ -267,7 +267,5 @@ uninstall-implib:
 uninstall-soname:
 	rm -f $(DESTDIR)$(libdir)/$(SONAME) $(DESTDIR)$(libdir)/libx264.$(SOSUFFIX)
 
-etags: TAGS
-
-TAGS:
+etags TAGS:
 	etags $(SRCS)

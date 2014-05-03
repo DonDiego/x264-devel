@@ -1082,8 +1082,7 @@ done
 
 if [ $compiler = ICL ]; then
     AR="xilib -nologo -out:"
-    DEPMM=-QMM
-    DEPMT=-QMT
+    CFLAGS="-QMMD $CFLAGS"
     HAVE_GETOPT_LONG=0
     LD="xilink -out:"
     LDFLAGS="-nologo -incremental:no $(icl_ldflags $LDFLAGS)"
@@ -1100,8 +1099,7 @@ if [ $compiler = ICL ]; then
     fi
 else
     AR="$AR rc "
-    DEPMM="-MM -g0"
-    DEPMT="-MT"
+    CFLAGS="-MMD $CFLAGS"
     LD="$CC -o "
     LIBX264=libx264.a
     [ -n "$RC" ] && RCFLAGS="$RCFLAGS -I. -o "
@@ -1147,8 +1145,6 @@ ARCH=$ARCH
 SYS=$SYS
 CC=$CC
 CFLAGS=$CFLAGS
-DEPMM=$DEPMM
-DEPMT=$DEPMT
 LD=$LD
 LDFLAGS=$LDFLAGS
 LIBX264=$LIBX264

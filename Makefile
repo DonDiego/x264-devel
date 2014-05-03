@@ -140,12 +140,12 @@ cli: x264$(EXE)
 lib-static: $(LIBX264)
 lib-shared: $(SONAME)
 
-$(LIBX264): $(GENERATED) .depend $(OBJS) $(OBJASM)
+$(LIBX264): $(GENERATED) $(OBJS) $(OBJASM)
 	rm -f $(LIBX264)
 	$(AR)$@ $(OBJS) $(OBJASM)
 	$(if $(RANLIB), $(RANLIB) $@)
 
-$(SONAME): $(GENERATED) .depend $(OBJS) $(OBJASM) $(OBJSO)
+$(SONAME): $(GENERATED) $(OBJS) $(OBJASM) $(OBJSO)
 	$(LD)$@ $(OBJS) $(OBJASM) $(OBJSO) $(SOFLAGS) $(LDFLAGS)
 
 ifneq ($(EXE),)
@@ -154,13 +154,11 @@ x264: x264$(EXE)
 checkasm: checkasm$(EXE)
 endif
 
-x264$(EXE): $(GENERATED) .depend $(OBJCLI) $(CLI_LIBX264)
+x264$(EXE): $(GENERATED) $(OBJCLI) $(CLI_LIBX264)
 	$(LD)$@ $(OBJCLI) $(CLI_LIBX264) $(LDFLAGSCLI) $(LDFLAGS)
 
-checkasm$(EXE): $(GENERATED) .depend $(OBJCHK) $(LIBX264)
+checkasm$(EXE): $(GENERATED) $(OBJCHK) $(LIBX264)
 	$(LD)$@ $(OBJCHK) $(LIBX264) $(LDFLAGS)
-
-$(OBJS) $(OBJASM) $(OBJSO) $(OBJCLI) $(OBJCHK): .depend
 
 %.o: %.asm
 	$(AS) $(ASFLAGS) -o $@ $<
@@ -176,17 +174,13 @@ $(OBJS) $(OBJASM) $(OBJSO) $(OBJCLI) $(OBJCHK): .depend
 %.o: %.rc x264.h
 	$(RC) $(RCFLAGS)$@ $<
 
-.depend: config.mak
-	@rm -f .depend
-	@$(foreach SRC, $(addprefix $(SRCPATH)/, $(SRCS) $(SRCCLI) $(SRCSO)), $(CC) $(CFLAGS) $(SRC) $(DEPMT) $(SRC:$(SRCPATH)/%.c=%.o) $(DEPMM) 1>> .depend;)
-
 config.mak:
 	./configure
 
-depend: .depend
-ifneq ($(wildcard .depend),)
-include .depend
-endif
+ALLOBJS = $(OBJS) $(OBJASM) $(OBJSO) $(OBJCLI) $(OBJCHK)
+ALLDEPS = $(ALLOBJS:.o=.d)
+
+-include $(ALLDEPS)
 
 SRC2 = $(SRCS) $(SRCCLI)
 # These should cover most of the important codepaths
@@ -215,8 +209,8 @@ fprofiled:
 endif
 
 clean:
-	rm -f $(OBJS) $(OBJASM) $(OBJCLI) $(OBJSO) $(SONAME) *.a *.lib *.exp *.pdb x264 x264.exe .depend TAGS
-	rm -f checkasm checkasm.exe $(OBJCHK) $(GENERATED) x264_lookahead.clbin
+	rm -f $(ALLOBJS) $(ALLDEPS) $(SONAME) *.a *.lib *.exp *.pdb x264 x264.exe TAGS
+	rm -f checkasm checkasm.exe $(GENERATED) x264_lookahead.clbin
 	rm -f $(SRC2:%.c=%.gcda) $(SRC2:%.c=%.gcno) *.dyn pgopti.dpi pgopti.dpi.lock
 
 distclean: clean

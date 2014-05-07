@@ -1244,9 +1244,7 @@ Cflags: -I$includedir
 EOF
 
 filters="crop select_every"
-gpl_filters=""
 [ $swscale = yes ] && filters="resize $filters"
-[ $gpl = yes ] && filters="$filters $gpl_filters"
 
 cat > conftest.log <<EOF
 platform:      $ARCH

@@ -160,7 +160,7 @@ x264$(EXE): $(GENERATED) $(OBJCLI) $(CLI_LIBX264)
 checkasm$(EXE): $(GENERATED) $(OBJCHK) $(LIBX264)
 	$(LD)$@ $(OBJCHK) $(LIBX264) $(LDFLAGS)
 
-%.o: %.asm
+%.o: %.asm common/x86/x86inc.asm common/x86/x86util.asm
 	$(AS) $(ASFLAGS) -o $@ $<
 	-@ $(if $(STRIP), $(STRIP) -x $@) # delete local/anonymous symbols, so they don't show up in oprofile
 

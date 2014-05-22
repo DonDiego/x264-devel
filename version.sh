@@ -4,9 +4,9 @@
 git_version() {
 trap 'rm -f config.git-hash' EXIT
 git rev-list HEAD | sort > config.git-hash
-LOCALVER=`wc -l config.git-hash | awk '{print $1}'`
+LOCALVER=$(wc -l config.git-hash | awk '{print $1}')
 if [ $LOCALVER \> 1 ] ; then
-    VER=`git rev-list origin/master | sort | join config.git-hash - | wc -l | awk '{print $1}'`
+    VER=$(git rev-list origin/master | sort | join config.git-hash - | wc -l | awk '{print $1}')
     VER_DIFF=$(($LOCALVER-$VER))
     echo "#define X264_REV $VER"
     echo "#define X264_REV_DIFF $VER_DIFF"
@@ -25,5 +25,5 @@ VER="x"
 VERSION=""
 [ -d .git ] && (type git >/dev/null 2>&1) && git_version
 echo "#define X264_VERSION \"$VERSION\""
-API=`grep '#define X264_BUILD' < x264.h | sed -e 's/.* \([1-9][0-9]*\).*/\1/'`
+API=$(grep '#define X264_BUILD' < x264.h | sed -e 's/.* \([1-9][0-9]*\).*/\1/')
 echo "#define X264_POINTVER \"0.$API.$VER\""
